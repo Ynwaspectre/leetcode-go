@@ -41,10 +41,12 @@ package array
 构建map
 遍历nums 计算target-nums[i]如果这个值存在map里则取出来,否则将当前nums[i]放入map里
 即 map[nums[i]]=i
+时间复杂度 O(n)
+空间复杂度 O(n)
 */
 //2020-03-22
 
-func twoSum(nums []int, target int) []int {
+func TwoSum(nums []int, target int) []int {
 	m := make(map[int]int)
 	for i, v := range nums {
 		if key, ok := m[target-v]; ok {
