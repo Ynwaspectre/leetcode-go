@@ -1,5 +1,7 @@
 package array
 
+import "sort"
+
 /**
 给你一个整数数组 nums ，数组中共有 n 个整数。132 模式的子序列 由三个整数 nums[i]、nums[j] 和 nums[k] 组成，并同时满足：i < j < k 和 nums[i] < nums[k] < nums[j] 。
 
@@ -42,14 +44,54 @@ n == nums.length
 //双指针。
 //构造map 存储 数字=>索引【】
 //i 的范围是0~len(nums)-3
-//遍历i的话 问题就转变成 从数组里找2个数j和k 满足j<k 而且nums[j]>nums[k] nums[k]>nums[i]
-func find132pattern(nums []int) bool {
-	var temp int
-	for i := 0; i < len(nums); i++ {
-		temp = nums[i]
-		for j := 1; j < len(nums)-1; j++ {
-			//从j-len(nums-1)中 找2个数  m,k 满足nums[m]>nums[k]&&nums[k]>temp  ,m<k
+//遍历i的话 问题就转变成 从数组里找2个数j和k 满足j<k 而且nums[j]>nums[k] nums[k]>nums[i]  好的 果断O(n^3)超时
+//func find132pattern(nums []int) bool {
+//	var temp int
+//	for i := 0; i < len(nums); i++ {
+//		temp = nums[i]
+//		if find(temp,nums[i+1:]){
+//			return true
+//		}
+//	}
+//	return false
+//}
+//
+////从nums里找2个数  a和b  a>b b>tem 而且a的索引在b前面
+//func find(temp int, nums []int) bool {
+//	for i := 0; i < len(nums); i++ {
+//		for j:=i+1;j<len(nums);j++{
+//			if (nums[j]<nums[i]) &&(nums[j]>temp){
+//				return true
+//			}
+//		}
+//	}
+//	return false
+//}
 
+//遍历中间数字j j遍历的时候 要从 0~j-1找出一个比j小的尽量是最小值  从j+1 到len-1找出比j小 比i大的
+func find132pattern(nums []int) bool {
+	if len(nums) < 3 {
+		return false
+	}
+	leftMin := nums[0]
+	for j := 1; j < len(nums)-1; j++ {
+		if nums[j] <= leftMin {
+			leftMin = nums[j]
+		} else {
+			//在j+1 到len(nums)-1中找比leftMin大的最小值
+			rightSort := nums[j+1:]
+			sort.Ints(rightSort)
+			//二分查找比leftMin大的最小值
+			var rightMin int
+			for k := 0; k < len(rightSort); k++ {
+				if rightSort[k] > leftMin {
+					rightMin = rightSort[k]
+				}
+			}
+			if rightMin < nums[j] {
+				return true
+			}
 		}
 	}
+	return false
 }
