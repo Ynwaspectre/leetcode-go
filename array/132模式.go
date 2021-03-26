@@ -1,6 +1,8 @@
 package array
 
-import "sort"
+import (
+	"math"
+)
 
 /**
 给你一个整数数组 nums ，数组中共有 n 个整数。132 模式的子序列 由三个整数 nums[i]、nums[j] 和 nums[k] 组成，并同时满足：i < j < k 和 nums[i] < nums[k] < nums[j] 。
@@ -68,30 +70,33 @@ n == nums.length
 //	return false
 //}
 
-//遍历中间数字j j遍历的时候 要从 0~j-1找出一个比j小的尽量是最小值  从j+1 到len-1找出比j小 比i大的
+//思路是从右往左遍历 先设置一个变量min为最小值 含义为小于3的最大值 即为当前可以用的2里面的最大值
+//为什么要最大值呢 因为如果左边1的元素得比2小 所以我们要尽可能让2是小于3的最大值
+// stack存储的是啥呢 存储的是一堆能满足的2 不过当新遍历的元素>stack中的最大元素得时候，
+//这个新遍历的元素就可以当做3 而把stack中的最大元素赋值给之前那个变量min
+//-1,3,2,0
 func find132pattern(nums []int) bool {
-	if len(nums) < 3 {
-		return false
-	}
-	leftMin := nums[0]
-	for j := 1; j < len(nums)-1; j++ {
-		if nums[j] <= leftMin {
-			leftMin = nums[j]
-		} else {
-			//在j+1 到len(nums)-1中找比leftMin大的最小值
-			rightSort := nums[j+1:]
-			sort.Ints(rightSort)
-			//二分查找比leftMin大的最小值
-			var rightMin int
-			for k := 0; k < len(rightSort); k++ {
-				if rightSort[k] > leftMin {
-					rightMin = rightSort[k]
-				}
-			}
-			if rightMin < nums[j] {
-				return true
-			}
+	length := len(nums)
+	min := math.MinInt64
+	stack := []int{nums[length-1]}
+	for i := length - 2; i >= 0; i-- {
+		//当新遍历的元素 小于我们存储的最大的2的时候 代表有一个132模式 ，这个1,3,2模式就是nums[i],stack的最大元素,min值
+		if nums[i] < min {
+			return true
+		}
+		//找stack里的最大值 看看是否比nums[i]小
+		for len(stack) > 0 && nums[i] > stack[len(stack)-1] {
+			min = stack[len(stack)-1]    //比nums[i]小的数 赋值给了min
+			stack = stack[:len(stack)-1] //丢到上一步的数
+		}
+		if nums[i] > min {
+			stack = append(stack, nums[i])
 		}
 	}
 	return false
 }
+
+//栈中最大的元素即当前遍历过的元素里最大的一个
+//总思路 就是从右到左遍历  维护 一个最大的2 和一个单调栈 其中栈顶是3比2大，如果接下来的数比2小 那就ok；否则把栈中小于这个数的值都拿出来，
+//最后一个赋值给2 ,然后把3放进去;
+//太难消化了这题  看别人的思路去想去消化 和自己想的要消耗的脑力差太多了
