@@ -37,6 +37,37 @@ package 链表
 */
 
 //只想到一个思路 先把两个数表示出来 然后对两个数相加 然后在表示回去 但是这也太。。然后觉得可以从头开始
+//按照前面开始对齐 有进位就记住 到下一个的时候加上 如果2个链表都空了要看下当前是否有进位 有的话 就next个节点 值为1
+//看了下题解 和官方思路一样 ！自己想出来了 牛！但是63~70行总感觉又点累赘的感觉
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-
+	l3 := &ListNode{0, nil}
+	l4 := l3
+	jinwei := 0
+	for l1 != nil || l2 != nil {
+		value := jinwei
+		if l1 != nil {
+			value += l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			value += l2.Val
+			l2 = l2.Next
+		}
+		jinwei = 0
+		if value >= 10 {
+			jinwei++ //下一步是否需要进位
+			l3.Val = value % 10
+		} else {
+			l3.Val = value
+		}
+		if l1 == nil && l2 == nil {
+			if jinwei == 1 {
+				l3.Next = &ListNode{1, nil}
+			}
+		} else {
+			l3.Next = &ListNode{0, nil}
+			l3 = l3.Next
+		}
+	}
+	return l4
 }
