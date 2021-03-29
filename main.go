@@ -24,45 +24,29 @@ func printNode(node *ListNode) {
 	}
 }
 
-func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	l3 := &ListNode{0, nil}
-	l4 := l3
-	jinwei := 0
-	for l1 != nil || l2 != nil {
-		value := jinwei
-		if l1 != nil {
-			value += l1.Val
-			l1 = l1.Next
-		}
-		if l2 != nil {
-			value += l2.Val
-			l2 = l2.Next
-		}
-		jinwei = 0
-		if value >= 10 {
-			jinwei++ //下一步是否需要进位
-			l3.Val = value % 10
+func deleteDuplicates(head *ListNode) *ListNode {
+	head1 := head
+	head2 := &ListNode{0, head}
+	head3 := head2
+	m := make(map[int]int)
+	for head1 != nil {
+		m[head1.Val]++
+		head1 = head1.Next
+	}
+	for head2.Next != nil {
+		if v, _ := m[head2.Next.Val]; v > 1 {
+			head2.Next = head2.Next.Next
+			v--
 		} else {
-			l3.Val = value
-		}
-		if l1 == nil && l2 == nil {
-			if jinwei == 1 {
-				l3.Next = &ListNode{1, nil}
-			}
-		} else {
-			l3.Next = &ListNode{0, nil}
-			l3 = l3.Next
+			head2 = head2.Next
 		}
 	}
-	return l4
+	return head3.Next
 }
 
 func main() {
-	//l1 := createNode([]int{2, 4, 3})
-	//l2 := createNode([]int{5, 6, 4})
-	l1 := createNode([]int{9, 9, 9, 9, 9, 9, 9})
-	l2 := createNode([]int{9, 9, 9, 9})
-	node := addTwoNumbers(l1, l2)
+	nums := createNode([]int{1, 1})
+	node := deleteDuplicates(nums)
 	printNode(node)
 
 }
