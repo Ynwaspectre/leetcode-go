@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ListNode struct {
 	Val  int
@@ -24,29 +26,15 @@ func printNode(node *ListNode) {
 	}
 }
 
-func deleteDuplicates(head *ListNode) *ListNode {
-	head1 := head
-	head2 := &ListNode{0, head}
-	head3 := head2
-	m := make(map[int]int)
-	for head1 != nil {
-		m[head1.Val]++
-		head1 = head1.Next
+func reverseBits(num uint32) uint32 {
+	var n uint32
+	for i := 0; i < 32 && num > 0; i++ {
+		n |= num % 2 << (31 - i) //二进制加 类似于| 0|0= 0,0|1 =1
+		num >>= 1
 	}
-	for head2.Next != nil {
-		if v, _ := m[head2.Next.Val]; v > 1 {
-			head2.Next = head2.Next.Next
-			v--
-		} else {
-			head2 = head2.Next
-		}
-	}
-	return head3.Next
+	return n
 }
 
 func main() {
-	nums := createNode([]int{1, 1})
-	node := deleteDuplicates(nums)
-	printNode(node)
-
+	fmt.Println(reverseBits(43261596))
 }
