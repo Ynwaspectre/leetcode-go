@@ -1,7 +1,8 @@
 package 其他
 
 /**
-你正在使用一堆木板建造跳水板。有两种类型的木板，其中长度较短的木板长度为shorter，长度较长的木板长度为longer。你必须正好使用k块木板。编写一个方法，生成跳水板所有可能的长度。
+你正在使用一堆木板建造跳水板。有两种类型的木板，其中长度较短的木板长度为shorter，
+长度较长的木板长度为longer。你必须正好使用k块木板。编写一个方法，生成跳水板所有可能的长度。
 
 返回的长度需要从小到大排列。
 
@@ -24,6 +25,17 @@ k = 3
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
+//比较简单 但是有2个大前提  k=0 没有次数 返回空的,还有一个shorter==longer的时候 即只有一种情况 shorter*k
 func divingBoard(shorter int, longer int, k int) []int {
-
+	var store []int
+	if k == 0 {
+		return store
+	}
+	if shorter == longer {
+		return []int{shorter * k}
+	}
+	for i := k; i >= 0; i-- {
+		store = append(store, shorter*i+(k-i)*longer)
+	}
+	return store
 }
