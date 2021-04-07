@@ -14,5 +14,4 @@ func findGtKMax(nums []int, k int) int {
 			r = mid - 1
 		}
 	}
-
 }
