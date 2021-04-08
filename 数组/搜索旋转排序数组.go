@@ -55,14 +55,14 @@ func search(nums []int, target int) int {
 			return mid
 		}
 		if nums[0] <= nums[mid] {
-			if target <= nums[mid] && target >= nums[0] {
+			if target < nums[mid] && target >= nums[0] {
 				r = mid - 1
 			} else {
 				l = mid + 1
 			}
 
 		} else {
-			if target >= nums[mid] && target <= nums[len(nums)-1] {
+			if target > nums[mid] && target <= nums[len(nums)-1] {
 				l = mid + 1
 			} else {
 				r = mid - 1
