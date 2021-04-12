@@ -58,89 +58,42 @@ commands[i] is one of the values in the list [-2,-1,1,2,3,4,5,6,7,8,9].
 */
 
 func robotSim(commands []int, obstacles [][]int) int {
-	direction := 1 //默认向北
-	x, y := 0, 0   //坐标
-	flag := 0      //当前是不是遇到障碍物了
-	//先标记点
-	var nextZhangai []int
+	//把所有障碍物都存储起来 便于访问的时候复杂度是O1
+	m := make(map[[2]int]bool)
+	for _, v := range obstacles {
+		m[[2]int{v[0], v[1]}] = true
+	}
+	x, y, direct := 0, 0, 0
+	//定义方向 0 北 1 东 2 南  3 西
+	directX := []int{0, 1, 0, -1}
+	directY := []int{1, 0, -1, 0}
+
+	result := 0 //记录最大值
+	//遍历指令
 	for _, v := range commands {
-		if len(obstacles) > 0 {
-			nextZhangai = obstacles[0] //最近一个障碍
+		if v == -2 {
+			//左转90 等于右转3个90
+			direct = (direct + 3) % 4
+			continue
 		}
-		if v > 0 && flag == 0 {
-			//步数
-			if direction == 1 {
-				//往北走 x不变 y++
-				if len(nextZhangai) > 0 && x == nextZhangai[0] && y+v >= nextZhangai[1] && nextZhangai[1] > y {
-					//遇到了 x不变 y为障碍物前面一个
-					y = nextZhangai[1] - 1
-					flag = 1
-				} else {
-					y += v
-				}
-			} else if direction == 2 {
-				//向东走 x-- y不变
-				if len(nextZhangai) > 0 && y == nextZhangai[1] && x-v <= nextZhangai[0] && x > nextZhangai[0] {
-					x = nextZhangai[0] + 1
-					flag = 1
-				} else {
-					x -= v
-				}
-			} else if direction == 3 {
-				//向南走 x不变 y--
-				if len(nextZhangai) > 0 && x == nextZhangai[0] && y-v <= nextZhangai[1] && y > nextZhangai[1] {
-					y = nextZhangai[1] + 1
-					flag = 1
-				} else {
-					y -= v
-				}
-			} else {
-				//向西走  x++ y不变
-				if len(nextZhangai) > 0 && y == nextZhangai[1] && x+v >= nextZhangai[0] && x < nextZhangai[0] {
-					x = nextZhangai[0] - 1
-					flag = 1
-				} else {
-					x += v
-				}
+
+		if v == -1 {
+			direct = (direct + 1) % 4
+			continue
+		}
+
+		for i := 1; i <= v; i++ {
+			temX := x + directX[direct]
+			temY := y + directY[direct]
+			if _, ok := m[[2]int{temX, temY}]; ok {
+				break
 			}
-		} else {
-			//改变方向
-			direction = getDirection(v, direction)
-			if flag == 1 {
-				flag = 0
-				obstacles = obstacles[1:]
+			if (temX*temX + temY*temY) > result {
+				result = temX*temX + temY*temY
 			}
-		}
-
-	}
-	return x*x + y*y
-}
-
-/**
-表明方向  北 1  东2  南3  西 4
-*/
-func getDirection(command int, direction int) int {
-	if command == -2 {
-		if direction == 1 {
-			return 4
-		} else if direction == 2 {
-			return 1
-		} else if direction == 3 {
-			return 2
-		} else {
-			return 3
-		}
-
-	} else if command == -1 {
-		if direction == 1 {
-			return 2
-		} else if direction == 2 {
-			return 3
-		} else if direction == 3 {
-			return 4
-		} else {
-			return 1
+			x = temX
+			y = temY
 		}
 	}
-	return direction
+	return result
 }
