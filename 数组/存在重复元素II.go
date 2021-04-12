@@ -24,7 +24,7 @@ package 数组
 */
 
 //利用hash表 存储上一个这个数的索引 如果后面出现和这个索引差值小于等于k的索引 那直接返回false，否则丢到
-//目前的索引 换上新的索引
+//目前的索引 换上新的索引 时间大幅度提高  缺点 内存高了
 func containsNearbyDuplicate(nums []int, k int) bool {
 	m := make(map[int]int)
 	for i := 0; i < len(nums); i++ {
