@@ -60,49 +60,58 @@ commands[i] is one of the values in the list [-2,-1,1,2,3,4,5,6,7,8,9].
 func robotSim(commands []int, obstacles [][]int) int {
 	direction := 1 //默认向北
 	x, y := 0, 0   //坐标
-	yudao := 0     //前方有障碍物
+	flag := 0      //当前是不是遇到障碍物了
 	//先标记点
-	nextZhangai := obstacles[0]
+	var nextZhangai []int
 	for _, v := range commands {
-		if v > 0 {
-			if yudao == 1 {
-				continue //执行下个命令
-			}
+		if len(obstacles) > 0 {
+			nextZhangai = obstacles[0] //最近一个障碍
+		}
+		if v > 0 && flag == 0 {
+			//步数
 			if direction == 1 {
-				if x == nextZhangai[0] && y+v > nextZhangai[1] {
-					y = nextZhangai[1] - 1 //遇到障碍了
+				//往北走 x不变 y++
+				if len(nextZhangai) > 0 && x == nextZhangai[0] && y+v >= nextZhangai[1] && nextZhangai[1] > y {
+					//遇到了 x不变 y为障碍物前面一个
+					y = nextZhangai[1] - 1
+					flag = 1
 				} else {
 					y += v
 				}
 			} else if direction == 2 {
-				for x > x-v {
-					x -= 1
-					if m[string(x)+string(y)] {
-						yudao = 1
-						continue
-					}
+				//向东走 x-- y不变
+				if len(nextZhangai) > 0 && y == nextZhangai[1] && x-v <= nextZhangai[0] && x > nextZhangai[0] {
+					x = nextZhangai[0] + 1
+					flag = 1
+				} else {
+					x -= v
 				}
 			} else if direction == 3 {
-				for y > y-v {
-					y -= 1
-					if m[string(x)+string(y)] {
-						yudao = 1
-						continue
-					}
+				//向南走 x不变 y--
+				if len(nextZhangai) > 0 && x == nextZhangai[0] && y-v <= nextZhangai[1] && y > nextZhangai[1] {
+					y = nextZhangai[1] + 1
+					flag = 1
+				} else {
+					y -= v
 				}
 			} else {
-				for x < x+v {
-					x += 1
-				}
-				if m[string(x)+string(y)] {
-					yudao = 1
-					continue
+				//向西走  x++ y不变
+				if len(nextZhangai) > 0 && y == nextZhangai[1] && x+v >= nextZhangai[0] && x < nextZhangai[0] {
+					x = nextZhangai[0] - 1
+					flag = 1
+				} else {
+					x += v
 				}
 			}
-			yudao = 0
 		} else {
+			//改变方向
 			direction = getDirection(v, direction)
+			if flag == 1 {
+				flag = 0
+				obstacles = obstacles[1:]
+			}
 		}
+
 	}
 	return x*x + y*y
 }
