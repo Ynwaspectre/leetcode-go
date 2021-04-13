@@ -6,7 +6,7 @@ package 数组
 func findGtKMax(nums []int, k int) int {
 	l := 0
 	r := len(nums) - 1
-	for l < r {
+	for l <= r {
 		mid := (l + r + 1) / 2 //取高位
 		if nums[mid] <= k {
 			l = mid + 1
@@ -14,4 +14,8 @@ func findGtKMax(nums []int, k int) int {
 			r = mid - 1
 		}
 	}
+	if l > len(nums)-1 {
+		return -1
+	}
+	return nums[l]
 }
