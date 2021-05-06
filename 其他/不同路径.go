@@ -45,6 +45,11 @@ package 其他
 
 //递归吧  向下一步就是 m-1,n,向右一步就是 m,n-1
 //然鹅超时
+
+//动态规划吧 //去第i行第j列的走法一共有dp[i][j]种 只可能由上2种演变而来
+////dp[i][j]=dp[i-1][j]+dp[i][j-1]
+//
+
 func uniquePaths(m int, n int) int {
 	if m == 1 || n == 1 {
 		return 1
