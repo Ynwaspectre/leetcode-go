@@ -48,11 +48,27 @@ package 其他
 
 //动态规划吧 //去第i行第j列的走法一共有dp[i][j]种 只可能由上2种演变而来
 ////dp[i][j]=dp[i-1][j]+dp[i][j-1]
-//
+//nice 算是第一次不参考任何东西写动态规划 就是在m和n谁是行和列的上面模糊了会,其他思路挺清晰
 
 func uniquePaths(m int, n int) int {
-	if m == 1 || n == 1 {
-		return 1
+	var dp [101][101]int
+	for i := 1; i <= m; i++ {
+		dp[i][1] = 1
 	}
-	return uniquePaths(m-1, n) + uniquePaths(m, n-1)
+	for i := 1; i <= n; i++ {
+		dp[1][i] = 1
+	}
+	for i := 2; i <= m; i++ {
+		for j := 2; j <= n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
+		}
+	}
+	return dp[m][n]
 }
+
+//func uniquePaths(m int, n int) int {
+//	if m == 1 || n == 1 {
+//		return 1
+//	}
+//	return uniquePaths(m-1, n) + uniquePaths(m, n-1)
+//}
