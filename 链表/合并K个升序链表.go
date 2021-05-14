@@ -64,12 +64,12 @@ func mergeKLists(lists []*ListNode) *ListNode {
 	return createNode(nums)
 }
 
-func createNode(nums []int) *ListNode {
-	head := &ListNode{nums[0], nil}
-	head1 := head
-	for i := 1; i < len(nums); i++ {
-		head1.Next = &ListNode{nums[i], nil}
-		head1 = head1.Next
-	}
-	return head
-}
+//func createNode(nums []int) *ListNode {
+//	head := &ListNode{nums[0], nil}
+//	head1 := head
+//	for i := 1; i < len(nums); i++ {
+//		head1.Next = &ListNode{nums[i], nil}
+//		head1 = head1.Next
+//	}
+//	return head
+//}
