@@ -43,7 +43,7 @@ candidate 中的每个元素都是独一无二的。
 //排个序先！双指针但是好像不咋好实现 还要考虑相同元素多个情况，咋整
 // 没思路 //
 //终于在看了题解后 理解了会写出来了 之前没遇到过这种 算是一种新的见识了，
-//其实我刚开始想到了递归 但是方式不一样
+//其实我刚开始想到了递归 但是方式不一样  还有第60行和61行 append要append复制的一份 没搞懂
 func combinationSum(candidates []int, target int) [][]int {
 	var combine []int
 	result := dfs(candidates, target, combine, 0)
@@ -57,7 +57,9 @@ func dfs(candidates []int, target int, combine []int, idx int) [][]int {
 		return result
 	}
 	if target == 0 {
-		result = append(result, combine)
+		newCombine := make([]int, len(combine))
+		copy(newCombine, combine)
+		result = append(result, newCombine)
 		return result
 	}
 	result = append(result, dfs(candidates, target, combine, idx+1)...)
