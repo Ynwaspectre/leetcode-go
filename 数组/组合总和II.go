@@ -1,5 +1,10 @@
 package 数组
 
+import (
+	"sort"
+	"strconv"
+)
+
 /**
 给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
 
@@ -32,31 +37,32 @@ candidates 中的每个数字在每个组合中只能使用一次。
 链接：https://leetcode-cn.com/problems/combination-sum-ii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
-
+//和第一个类似 ，但是这个是循环解决的 有点头疼 感觉写算法题还是要自己想
+//看别人的只能看个思路
 func combinationSum2(candidates []int, target int) [][]int {
-
-	var combine []int
-	result := dfs(candidates, combine, target, 0)
+	var combine []int //记录选择的数据
+	var result [][]int
+	sort.Ints(candidates)
+	//m := make(map[string]int)
+	dfs(&result, candidates, target, combine, 0)
 	return result
 }
 
-func dfs(candidates []int, combine []int, target int, idx int) [][]int {
-	var result [][]int
-	if idx == len(candidates) {
-		return result
-	}
+func dfs(result *[][]int, candidates []int, target int, combine []int, idx int) {
 	if target == 0 {
 		newCombine := make([]int, len(combine))
 		copy(newCombine, combine)
-		result = append(result, newCombine)
+		*result = append(*result, newCombine)
 	}
-
-	//直接跳过
-	result = append(result, dfs(candidates, combine, target, idx+1)...)
-	//选择
-	if target-candidates[idx] >= 0 {
-		combine = append(combine, candidates[idx])
-		result = append(result, dfs(candidates, combine, target-candidates[idx], idx+1)...)
+	for i := idx; i < len(candidates); i++ {
+		if target-candidates[i] < 0 {
+			break
+		}
+		if i > idx && candidates[i] == candidates[i-1] {
+			continue
+		}
+		combine = append(combine, candidates[i])
+		dfs(result, candidates, target-candidates[i], combine, i+1)
+		combine = combine[:len(combine)-1]
 	}
-	return result
 }
