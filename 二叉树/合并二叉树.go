@@ -9,12 +9,6 @@ package 二叉树
  * }
  */
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 //虽然是简单的 但是之前没写过二叉树 想了一会写出来了 递归 类似于多个子问题变成最后的问题
 func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
 	Val := 0
