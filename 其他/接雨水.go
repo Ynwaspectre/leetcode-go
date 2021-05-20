@@ -28,7 +28,43 @@ n == height.length
 链接：https://leetcode-cn.com/problems/trapping-rain-water
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
-
+//看的题解动态规划  不咋需要看代码 只要看思路就可以写出来了
+//最关键的一点是 第54行 第i行的最大盛水是 左边的最大高度和右边的最大高度 2个值取最小 然后减去自己的高度
 func trap(height []int) int {
+	length := len(height)
 
+	if length == 0 {
+		return 0
+	}
+
+	leftMax := make([]int, length)
+	rightMax := make([]int, length)
+
+	leftMax[0] = height[0]
+	for i := 1; i < length; i++ {
+		leftMax[i] = max(height[i], leftMax[i-1])
+	}
+
+	rightMax[length-1] = height[length-1]
+	for i := length - 2; i >= 0; i-- {
+		rightMax[i] = max(height[i], rightMax[i+1])
+	}
+	total := 0
+	for i := 0; i < length; i++ {
+		total += min(leftMax[i], rightMax[i]) - height[i]
+	}
+	return total
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+func min(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
 }
