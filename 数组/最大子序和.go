@@ -42,25 +42,18 @@ package 数组
 */
 
 //最大的肯定2边都是负数 这种感觉一看就是要双指针
+//好的看错了 题解里没 我也没想出来 看到是动态规划 稍微看下就可以了  属于比较简单好理解的
 func maxSubArray(nums []int) int {
-	l := 0
-	r := len(nums) - 1
-	sum := 0
-	for _, v := range nums {
-		sum += v
+	dp := make([]int, len(nums))
+	dp[0] = nums[0]
+	for i := 1; i < len(nums); i++ {
+		dp[i] = max(nums[i], nums[i]+dp[i-1])
 	}
-	sum1 := sum
-	for l < r {
-		if nums[l] <= nums[r] {
-			l++
-			sum1 -= nums[l]
-		} else {
-			r--
-			sum1 -= nums[r]
-		}
-		sum = max(sum1, sum)
+	result := dp[0]
+	for i := 0; i < len(dp); i++ {
+		result = max(dp[i], result)
 	}
-	return sum
+	return result
 }
 
 func max(x, y int) int {
