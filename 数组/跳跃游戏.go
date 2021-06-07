@@ -30,7 +30,23 @@ package 数组
 链接：https://leetcode-cn.com/problems/jump-game
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
-
+//第一想法是回溯 递归啥的 好像好多要考虑的
+//第二想法动态规划从后往前?  不得了 还真是 竟然让我一次写对了 我可真牛 可是为啥时间挺多 按道理是O（n）啊
 func canJump(nums []int) bool {
+	length := len(nums)
+	df := make([]bool, length)
+	df[length-1] = true //最后一个肯定是true
 
+	lastCan := length - 1 //记录最近一个可以的索引
+	for i := length - 2; i >= 0; i-- {
+		if nums[i] == 0 {
+			df[i] = false
+		} else {
+			df[i] = (i + nums[i]) >= lastCan //大于就是true
+			if df[i] {
+				lastCan = i
+			}
+		}
+	}
+	return df[0]
 }
