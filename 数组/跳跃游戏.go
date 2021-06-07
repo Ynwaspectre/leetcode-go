@@ -32,6 +32,7 @@ package 数组
 */
 //第一想法是回溯 递归啥的 好像好多要考虑的
 //第二想法动态规划从后往前?  不得了 还真是 竟然让我一次写对了 我可真牛 可是为啥时间挺多 按道理是O（n）啊
+//等等这好像不是动态规划 因为2者之间没啥联系 i和i-1
 func canJump(nums []int) bool {
 	length := len(nums)
 	df := make([]bool, length)
