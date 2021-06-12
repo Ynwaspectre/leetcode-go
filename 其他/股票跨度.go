@@ -40,29 +40,31 @@ S.next(85) 被调用并返回 6。
 */
 
 //维护一个单调递增栈 小于当前元素的都移除栈
-
 type StockSpanner struct {
-	Stack []int
+	Stack  []int //存price
+	Weight []int //记录每个price距离前面第一个比他大的数的距离
 }
 
 func Constructor() StockSpanner {
-	spanner := StockSpanner{[]int{}}
+	spanner := StockSpanner{[]int{}, []int{}}
 	return spanner
 }
 
 func (this *StockSpanner) Next(price int) int {
 	if len(this.Stack) == 0 {
 		this.Stack = append(this.Stack, price)
+		this.Weight = append(this.Weight, 1)
 		return 1
 	} else {
-		count := 1
-		j := len(this.Stack) - 1
-		for j >= 0 && price >= this.Stack[j] {
-			count++
-			j--
+		w := 1
+		for len(this.Stack) > 0 && price >= this.Stack[len(this.Stack)-1] {
+			this.Stack = this.Stack[:len(this.Stack)-1] //移除出栈
+			w += this.Weight[len(this.Weight)-1]
+			this.Weight = this.Weight[:len(this.Weight)-1]
 		}
 		this.Stack = append(this.Stack, price)
-		return count
+		this.Weight = append(this.Weight, w)
+		return w
 	}
 }
 
