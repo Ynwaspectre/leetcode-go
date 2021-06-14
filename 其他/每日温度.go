@@ -18,16 +18,12 @@ func dailyTemperatures(temperatures []int) []int {
 	l := len(temperatures)
 	index := make([]int, len(temperatures))
 	for i := 0; i < l; i++ {
-		if len(stack) == 0 {
-			stack = append(stack, 0)
-		} else {
-			//大于栈顶最小的 出栈记录数据
-			for len(stack) > 0 && temperatures[stack[len(stack)-1]] < temperatures[i] {
-				index[stack[len(stack)-1]] = i - stack[len(stack)-1]
-				stack = stack[:len(stack)-1]
-			}
-			stack = append(stack, i)
+		//大于栈顶最小的 出栈记录数据
+		for len(stack) > 0 && temperatures[stack[len(stack)-1]] < temperatures[i] {
+			index[stack[len(stack)-1]] = i - stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
 		}
+		stack = append(stack, i)
 	}
 	//全部出栈 设为0
 	for len(stack) > 0 {
