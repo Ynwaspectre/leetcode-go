@@ -53,10 +53,12 @@ matrix[i][j] 为 '0' 或 '1'
 */
 
 func maximalRectangle(matrix [][]byte) int {
+	if len(matrix) == 0 {
+		return 0
+	}
 	leftNum := make([][]int, len(matrix))
 	for i := 0; i < len(matrix); i++ {
-		temp := make([]int, len(matrix[0]))
-		leftNum[i] = temp
+		leftNum[i] = make([]int, len(matrix[0]))
 	}
 
 	for i := 0; i < len(matrix); i++ {
@@ -73,13 +75,13 @@ func maximalRectangle(matrix [][]byte) int {
 	ans := 0
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[0]); j++ {
-			if leftNum[i][j] == 0 { //是0 不能组成
+			if matrix[i][j] == '0' { //是0 不能组成
 				continue
 			}
 			w := leftNum[i][j]
 			area := w
 			for k := i - 1; k >= 0; k-- {
-				w := min(w, leftNum[k][j])
+				w = min(w, leftNum[k][j]) //made 这边原本写错了 写成重新赋值了 结果搞了半天都不对
 				area = max(area, w*(i-k+1))
 			}
 			ans = max(ans, area)
