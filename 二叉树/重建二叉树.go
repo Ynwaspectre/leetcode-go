@@ -29,6 +29,21 @@ package 二叉树
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
+//前序遍历第一个元素是根节点  因为没有重复元素  所以在中序遍历里找到第一个和preorder[0]相同的元素 可以把 中序遍历和前序遍历进行划分
+//然后递归
 func buildTree(preorder []int, inorder []int) *TreeNode {
-
+	if len(preorder) == 0 {
+		return nil
+	}
+	root := &TreeNode{preorder[0], nil, nil} //根节点
+	i := 0
+	for ; i < len(inorder); i++ {
+		if inorder[i] == preorder[0] {
+			break
+		}
+	}
+	//前序遍历  第1~第i个元素是 左子树 i
+	root.Left = buildTree(preorder[1:i+1], inorder[:i])
+	root.Right = buildTree(preorder[i+1:], inorder[i+1:])
+	return root
 }
