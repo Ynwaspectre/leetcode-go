@@ -1,5 +1,7 @@
 package 数组
 
+import "math"
+
 /**
 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
 
@@ -32,7 +34,33 @@ package 数组
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-//单调栈吧 但是做了这么多单调栈 我还是写不出来  感觉是要记录下某元素距离他上次的最大值
+//dp[i] 代表第i个下标的最大利润
 func maxProfit(prices []int) int {
+	minValue := math.MaxInt64
+	minIndex := -1
+	for i := 0; i < len(prices); i++ {
+		minValue = min(minValue, prices[i])
+		minIndex = i
+	}
+	maxValue := 0
+	for i := 0; i < len(prices); i++ {
+		if i > minIndex && prices[i] > minValue {
+			maxValue = max(maxValue, prices[i])
+		}
+	}
+	return maxValue
+}
 
+func min(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
 }
