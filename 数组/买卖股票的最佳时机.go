@@ -1,6 +1,6 @@
 package 数组
 
-import "math"
+import "fmt"
 
 /**
 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
@@ -34,28 +34,27 @@ import "math"
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-//dp[i] 代表第i个下标的最大利润
+//dp[i] 代表第i个下标卖出获得的最大利润
+//如果dp[i]>dp[i-1] 那么 dp[i]=dp[i-1]+prices[i] 否则
+//如果0~i-1的最小值大于 目前的值 则是0 否则就是当前的值减去前面的最小值
+//最小值是 prices[i-1]-dp[i-1]
 func maxProfit(prices []int) int {
-	minValue := math.MaxInt64
-	minIndex := -1
-	for i := 0; i < len(prices); i++ {
-		minValue = min(minValue, prices[i])
-		minIndex = i
-	}
+	dp := make([]int, len(prices))
+	dp[0] = 0
 	maxValue := 0
-	for i := 0; i < len(prices); i++ {
-		if i > minIndex && prices[i] > minValue {
-			maxValue = max(maxValue, prices[i])
+	for i := 1; i < len(prices); i++ {
+		if prices[i] > prices[i-1] {
+			dp[i] = dp[i-1] + prices[i] - prices[i-1]
+		} else {
+			if prices[i-1]-dp[i-1] > prices[i] {
+				dp[i] = 0
+			} else {
+				dp[i] = prices[i] - prices[i-1] + dp[i-1]
+			}
 		}
+		maxValue = max(maxValue, dp[i])
 	}
 	return maxValue
-}
-
-func min(x, y int) int {
-	if x > y {
-		return y
-	}
-	return x
 }
 
 func max(x, y int) int {
