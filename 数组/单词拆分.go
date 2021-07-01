@@ -29,18 +29,25 @@ package 数组
 */
 
 //dp[i]代表 0~i的字符串是否能被wordDict匹配到
+//i从1开始 先默认dp[i]=true 不然后面的值都是false 不好计算
+//dp[i]=dp[i-1]&&s[i] 点j在i0到i-1上  dp[i]满足任何一个即可
+//dp[i]=(dp[i-1]&&s[i])||dp[i-2]&&s[i-2:i]||.....-3,-4
 func wordBreak(s string, wordDict []string) bool {
 	dp := make([]bool, len(s)+1)
 	dp[0] = true
-	for i := 1; i < len(s); i++ {
+	for i := 1; i <= len(s); i++ {
 		for j := i - 1; j >= 0; j-- {
 			if !dp[j] {
 				continue
 			}
-			dp[i] = check(s[j:i], wordDict)
+			if check(s[j:i], wordDict) {
+				dp[i] = true
+				continue
+			}
+
 		}
 	}
-	return dp[len(s)-1]
+	return dp[len(s)]
 }
 
 func check(s string, wordDict []string) bool {
